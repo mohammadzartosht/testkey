@@ -1,0 +1,28 @@
+# تنظیمات پوشه‌ی API (تست سرعت و فرم نظرات).
+# این دستورها فقط وقتی اثر دارند که هاستینگ اجازه‌ی override در سطح پوشه بدهد
+# (mod_php / DSO). اگر از PHP-FPM یا suPHP استفاده می‌کنید نادیده گرفته می‌شوند و
+# باید مقادیر را از پنل هاست (مثلاً DirectAdmin ← PHP Config) تنظیم کنید.
+# نکته: تست آپلود در سمت کاربر بلوک‌های ۲ مگابایتی می‌فرستد، پس حتی با تنظیمات پیش‌فرض کار می‌کند.
+
+# هرگز payload تست سرعت را فشرده نکن؛ فشرده‌سازی اندازه‌گیری را مخدوش می‌کند.
+<IfModule mod_deflate.c>
+  SetEnvIfNoCase Request_URI "download\.php$" no-gzip dont-vary
+</IfModule>
+
+# فایل کمکی نباید مستقیم باز شود.
+<Files "_bootstrap.php">
+  Require all denied
+</Files>
+
+<IfModule mod_php.c>
+  php_value max_execution_time 60
+  php_value post_max_size 34M
+</IfModule>
+<IfModule mod_php7.c>
+  php_value max_execution_time 60
+  php_value post_max_size 34M
+</IfModule>
+<IfModule mod_php8.c>
+  php_value max_execution_time 60
+  php_value post_max_size 34M
+</IfModule>

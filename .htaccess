@@ -1,0 +1,24 @@
+# تنظیمات Apache برای کل سایت (نیازمند mod_headers / mod_deflate؛ اگر نبودند، نادیده گرفته می‌شوند).
+
+Options -Indexes
+DirectoryIndex index.php
+
+# CSS و JS هر بار با سرور اعتبارسنجی می‌شوند (۳۰۴ سریع)، پس بعد از هر به‌روزرسانی کاربر نسخه‌ی قدیمی نمی‌بیند.
+# (ماژول‌های JS به‌صورت import بارگذاری می‌شوند و نسخه‌ی آدرس ندارند.)
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <FilesMatch "\.wav$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+</IfModule>
+
+# نوع MIME صحیح برای ماژول‌های جاوااسکریپت
+<IfModule mod_mime.c>
+  AddType text/javascript .js
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
